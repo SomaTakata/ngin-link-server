@@ -1,8 +1,8 @@
 package model
 
 type NginLink struct {
-	NginLinkID string `json:"ngin_link_id"`
-	Links      []Link `json:"links"`
+	NginLinkID string  `json:"ngin_link_id"`
+	Links      []*Link `json:"links"`
 }
 
 type Link struct {
