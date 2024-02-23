@@ -1,0 +1,34 @@
+version: '3.1'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: ngin_link_server
+    tty: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+#    depends_on:
+#      - db
+    env_file: .env
+#  db:
+#    build:
+#      context: .
+#    image: mysql:8.0.36
+#    container_name: ngin_link_db
+#    restart: always
+#    ports:
+#      - "3305:3306"
+#    volumes:
+#      - db-store:/var/lib/mysql
+#    environment:
+#      - MYSQL_DATABASE=ngin_link_db
+#      - MYSQL_USER=admin
+#      - MYSQL_PASSWORD=admin
+#      - MYSQL_ROOT_PASSWORD=root
+#
+#volumes:
+#  db-store:
