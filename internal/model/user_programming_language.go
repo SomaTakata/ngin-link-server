@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type UserProgrammingLanguage struct {
 	gorm.Model
-	UserID              uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	UserID              uint `gorm:"not null;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	ProgrammingLanguage string
 }
