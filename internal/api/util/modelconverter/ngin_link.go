@@ -3,6 +3,7 @@ package modelconverter
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
+	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
 )
 
 func NginLinkFromDBModels(
@@ -10,26 +11,39 @@ func NginLinkFromDBModels(
 	userSocialLinks []*dbmodel.UserSocialLink,
 ) *model.NginLink {
 	return &model.NginLink{
-		NginLinkID: user.NginLinkID,
-		Links:      LinksFromDBModels(userSocialLinks),
+		NginLinkID:  user.NginLinkID,
+		SocialLinks: SocialLinksFromDBModels(userSocialLinks),
 	}
 }
 
-func LinksFromDBModels(
+func SocialLinksFromDBModels(
 	userSocialLinks []*dbmodel.UserSocialLink,
-) []*model.Link {
-	links := make([]*model.Link, len(userSocialLinks))
+) []*model.SocialLink {
+	socialLinks := make([]*model.SocialLink, len(userSocialLinks))
 	for i, userSocialLink := range userSocialLinks {
-		links[i] = LinkFromDBModel(userSocialLink)
+		socialLinks[i] = SocialLinkFromDBModel(userSocialLink)
 	}
-	return links
+	return socialLinks
 }
 
-func LinkFromDBModel(
+func SocialLinkFromDBModel(
 	userSocialLink *dbmodel.UserSocialLink,
-) *model.Link {
-	return &model.Link{
+) *model.SocialLink {
+	return &model.SocialLink{
 		PlatformName: userSocialLink.PlatformName,
-		LinkURL:      userSocialLink.LinkURL,
+		URL:          userSocialLink.SocialLinkURL,
 	}
+}
+
+func SocialLinksFromUserReqModel(
+	reqSocialLinks []*reqmodel.SocialLink,
+) []*model.SocialLink {
+	socialLinks := make([]*model.SocialLink, len(reqSocialLinks))
+	for i, reqSocialLink := range reqSocialLinks {
+		socialLinks[i] = &model.SocialLink{
+			PlatformName: reqSocialLink.PlatformName,
+			URL:          reqSocialLink.URL,
+		}
+	}
+	return socialLinks
 }
