@@ -7,4 +7,5 @@ type User struct {
 	ProfileImageURI      string   `json:"profile_image_uri"`
 	UniversityName       string   `json:"university_name"`
 	ProgrammingLanguages []string `json:"programming_languages"`
+	JobRole              string   `json:"job_role"`
 }
