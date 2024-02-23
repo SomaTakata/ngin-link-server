@@ -9,4 +9,5 @@ type User struct {
 	Username        string `gorm:"not null"`
 	ProfileImageURI string
 	UniversityName  string
+	JobRole         string
 }
