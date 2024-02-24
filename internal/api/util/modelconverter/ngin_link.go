@@ -41,12 +41,18 @@ func SocialLinksFromReqModels(
 ) []*model.SocialLink {
 	socialLinks := make([]*model.SocialLink, len(reqSocialLinks))
 	for i, reqSocialLink := range reqSocialLinks {
-		socialLinks[i] = &model.SocialLink{
-			PlatformName: reqSocialLink.PlatformName,
-			URL:          reqSocialLink.URL,
-		}
+		socialLinks[i] = SocialLinkFromReqModel(reqSocialLink)
 	}
 	return socialLinks
+}
+
+func SocialLinkFromReqModel(
+	reqSocialLink *reqmodel.SocialLink,
+) *model.SocialLink {
+	return &model.SocialLink{
+		PlatformName: reqSocialLink.PlatformName,
+		URL:          reqSocialLink.URL,
+	}
 }
 
 func SocialLinksToResModels(
@@ -54,12 +60,30 @@ func SocialLinksToResModels(
 ) []*resmodel.SocialLink {
 	resSocialLinks := make([]*resmodel.SocialLink, len(socialLinks))
 	for i, socialLink := range socialLinks {
-		resSocialLinks[i] = &resmodel.SocialLink{
-			PlatformName: socialLink.PlatformName,
-			URL:          socialLink.URL,
-		}
+		resSocialLinks[i] = SocialLinkToResModel(socialLink)
 	}
 	return resSocialLinks
+}
+
+func SocialLinkToResModel(
+	socialLink *model.SocialLink,
+) *resmodel.SocialLink {
+	return &resmodel.SocialLink{
+		PlatformName: socialLink.PlatformName,
+		URL:          socialLink.URL,
+	}
+}
+
+func SocialLinksToStructResModel(
+	socialLinks []*model.SocialLink,
+) resmodel.SocialLinksStruct {
+	resSocialLinks := make([]*resmodel.SocialLink, len(socialLinks))
+	for i, socialLink := range socialLinks {
+		resSocialLinks[i] = SocialLinkToResModel(socialLink)
+	}
+	return resmodel.SocialLinksStruct{
+		SocialLinks: resSocialLinks,
+	}
 }
 
 func SocialLinksToDBModels(

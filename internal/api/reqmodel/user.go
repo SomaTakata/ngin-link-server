@@ -9,12 +9,3 @@ type CreateUser struct {
 	JobRole              string        `json:"job_role"`
 	SocialLinks          []*SocialLink `json:"social_links"`
 }
-
-type SocialLink struct {
-	PlatformName string `json:"platform_name"`
-	URL          string `json:"url"`
-}
-
-type SocialLinksRequest struct {
-	SocialLinks []*SocialLink `json:"social_links"`
-}

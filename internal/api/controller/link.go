@@ -63,12 +63,12 @@ func (c linkController) Update(ctx *gin.Context) {
 		return
 	}
 
-	var socialLinksRequest reqmodel.SocialLinksRequest
-	if err := ctx.BindJSON(&socialLinksRequest); err != nil {
+	var socialLinksStruct reqmodel.SocialLinksStruct
+	if err := ctx.BindJSON(&socialLinksStruct); err != nil {
 		httperror.Handle(ctx, err, http.StatusBadRequest)
 		return
 	}
-	reqSocialLinks := socialLinksRequest.SocialLinks
+	reqSocialLinks := socialLinksStruct.SocialLinks
 
 	socialLinks := modelconverter.SocialLinksFromReqModels(reqSocialLinks)
 	newSocialLinks, err := c.linkUsecase.Update(clerkID, socialLinks)
@@ -77,7 +77,7 @@ func (c linkController) Update(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, modelconverter.SocialLinksToResModels(newSocialLinks))
+	ctx.JSON(http.StatusOK, modelconverter.SocialLinksToStructResModel(newSocialLinks))
 }
 
 func (c linkController) GetExchangeHistory(ctx *gin.Context) {
