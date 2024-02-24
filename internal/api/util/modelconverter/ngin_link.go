@@ -36,7 +36,7 @@ func SocialLinkFromDBModel(
 	}
 }
 
-func SocialLinksFromUserReqModel(
+func SocialLinksFromReqModels(
 	reqSocialLinks []*reqmodel.SocialLink,
 ) []*model.SocialLink {
 	socialLinks := make([]*model.SocialLink, len(reqSocialLinks))
@@ -49,7 +49,7 @@ func SocialLinksFromUserReqModel(
 	return socialLinks
 }
 
-func SocialLinksToResModel(
+func SocialLinksToResModels(
 	socialLinks []*model.SocialLink,
 ) []*resmodel.SocialLink {
 	resSocialLinks := make([]*resmodel.SocialLink, len(socialLinks))
@@ -60,4 +60,24 @@ func SocialLinksToResModel(
 		}
 	}
 	return resSocialLinks
+}
+
+func SocialLinksToDBModels(
+	socialLinks []*model.SocialLink,
+) []*dbmodel.UserSocialLink {
+	userSocialLinks := make([]*dbmodel.UserSocialLink, len(socialLinks))
+	for i, socialLink := range socialLinks {
+		userSocialLinks[i] = SocialLinkToDBModel(socialLink)
+	}
+	return userSocialLinks
+}
+
+func SocialLinkToDBModel(
+	socialLink *model.SocialLink,
+) *dbmodel.UserSocialLink {
+	//UserIDはRepository内で設定する
+	return &dbmodel.UserSocialLink{
+		PlatformName:  socialLink.PlatformName,
+		SocialLinkURL: socialLink.URL,
+	}
 }

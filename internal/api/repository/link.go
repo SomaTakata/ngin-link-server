@@ -3,11 +3,13 @@ package repository
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
+	"github.com/SomaTakata/ngin-link-server/internal/api/util/modelconverter"
 	"gorm.io/gorm"
 )
 
 type LinkRepository interface {
 	GetExchangeHistory(clerkID string) (*model.NginLinkExchangeHistory, error)
+	Update(clerkID string, socialLinks []*model.SocialLink) ([]*model.SocialLink, error)
 	CreateExchangeHistory(clerkID string, nginLinkID string) (*model.NginLinkExchangeHistory, error)
 }
 
@@ -41,6 +43,37 @@ func (r linkRepository) GetExchangeHistory(clerkID string) (*model.NginLinkExcha
 		ExchangedNginLinkIDs: collectedNginLinkIDs,
 	}
 	return nginLinkExchangeHistory, nil
+}
+
+func (r linkRepository) Update(clerkID string, socialLinks []*model.SocialLink) ([]*model.SocialLink, error) {
+	//DELETE&INSERTで対応
+	var dbUser *dbmodel.User
+	dbUserSocialLinks := modelconverter.SocialLinksToDBModels(socialLinks)
+
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.First(&dbUser, "clerk_id = ?", clerkID).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Where("user_id = ?", dbUser.ID).Delete(&dbmodel.UserSocialLink{}).Error; err != nil {
+			return err
+		}
+
+		for _, dbUserSocialLink := range dbUserSocialLinks {
+			dbUserSocialLink.UserID = dbUser.ID
+		}
+		if err := tx.Create(dbUserSocialLinks).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	newSocialLinks := modelconverter.SocialLinksFromDBModels(dbUserSocialLinks)
+	return newSocialLinks, nil
 }
 
 func (r linkRepository) CreateExchangeHistory(clerkID string, nginLinkID string) (*model.NginLinkExchangeHistory, error) {

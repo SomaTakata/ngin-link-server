@@ -39,7 +39,7 @@ func UserFromCreateUserReqModel(createUser *reqmodel.CreateUser) *model.User {
 	return &model.User{
 		NginLink: &model.NginLink{
 			NginLinkID:  createUser.NginLinkID,
-			SocialLinks: SocialLinksFromUserReqModel(createUser.SocialLinks),
+			SocialLinks: SocialLinksFromReqModels(createUser.SocialLinks),
 		},
 		Username:             createUser.Username,
 		ProfileImageURL:      createUser.ProfileImageURL,

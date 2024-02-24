@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/usecase"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/clerkutil"
@@ -43,7 +44,7 @@ func (c linkController) GetByNginLinkID(ctx *gin.Context) {
 	nginLinkInfo := resmodel.NginLinkInfo{
 		NginLink: &resmodel.NginLink{
 			NginLinkID:  user.NginLink.NginLinkID,
-			SocialLinks: modelconverter.SocialLinksToResModel(user.NginLink.SocialLinks),
+			SocialLinks: modelconverter.SocialLinksToResModels(user.NginLink.SocialLinks),
 		},
 		Username:             user.Username,
 		ProfileImageURL:      user.ProfileImageURL,
@@ -56,7 +57,27 @@ func (c linkController) GetByNginLinkID(ctx *gin.Context) {
 }
 
 func (c linkController) Update(ctx *gin.Context) {
+	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusUnauthorized)
+		return
+	}
 
+	var socialLinksRequest reqmodel.SocialLinksRequest
+	if err := ctx.BindJSON(&socialLinksRequest); err != nil {
+		httperror.Handle(ctx, err, http.StatusBadRequest)
+		return
+	}
+	reqSocialLinks := socialLinksRequest.SocialLinks
+
+	socialLinks := modelconverter.SocialLinksFromReqModels(reqSocialLinks)
+	newSocialLinks, err := c.linkUsecase.Update(clerkID, socialLinks)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, modelconverter.SocialLinksToResModels(newSocialLinks))
 }
 
 func (c linkController) GetExchangeHistory(ctx *gin.Context) {

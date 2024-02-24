@@ -64,13 +64,13 @@ func (c userController) Exists(ctx *gin.Context) {
 }
 
 func (c userController) Create(ctx *gin.Context) {
-	var createUser reqmodel.CreateUser
+	var createUser *reqmodel.CreateUser
 	if err := ctx.ShouldBindJSON(&createUser); err != nil {
 		httperror.Handle(ctx, err, http.StatusBadRequest)
 		return
 	}
 
-	user := modelconverter.UserFromCreateUserReqModel(&createUser)
+	user := modelconverter.UserFromCreateUserReqModel(createUser)
 
 	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
 	if err != nil {

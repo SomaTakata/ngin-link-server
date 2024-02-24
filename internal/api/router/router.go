@@ -27,7 +27,7 @@ func NewRouter(userController controller.UserController, linkController controll
 	linkRouter := r.Group("/links")
 	{
 		linkRouter.GET("/:ngin-link-id", linkController.GetByNginLinkID)
-		//linkRouter.PATCH("", linkController.Update)
+		linkRouter.PATCH("", linkController.Update)
 		linkRouter.GET("/exchanged-ngin-links", linkController.GetExchangeHistory)
 		linkRouter.POST("/exchanged-ngin-links/:ngin-link-id", linkController.CreateExchangeHistory)
 	}

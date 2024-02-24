@@ -7,7 +7,7 @@ import (
 
 type LinkUsecase interface {
 	GetByNginLinkID(nginLinkID string) (*model.User, error)
-	//Update
+	Update(clerkID string, socialLinks []*model.SocialLink) ([]*model.SocialLink, error)
 	GetExchangeHistory(clerkID string) (*model.NginLinkExchangeHistory, error)
 	CreateExchangeHistory(clerkID string, nginLinkID string) (*model.NginLinkExchangeHistory, error)
 }
@@ -24,6 +24,10 @@ type linkUsecase struct {
 func (u linkUsecase) GetByNginLinkID(nginLinkID string) (*model.User, error) {
 	//ほぼuser情報そのものを使うので、userRepositoryから取得する
 	return u.userRepository.GetByNginLinkID(nginLinkID)
+}
+
+func (u linkUsecase) Update(clerkID string, socialLinks []*model.SocialLink) ([]*model.SocialLink, error) {
+	return u.linkRepository.Update(clerkID, socialLinks)
 }
 
 func (u linkUsecase) GetExchangeHistory(clerkID string) (*model.NginLinkExchangeHistory, error) {
