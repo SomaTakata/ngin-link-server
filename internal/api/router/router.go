@@ -21,13 +21,14 @@ func NewRouter(userController controller.UserController, linkController controll
 		userRouter.GET("", userController.Get)
 		userRouter.POST("", userController.Create)
 		//userRouter.PATCH("", userController.Update)
+		//userRouter.GET("/exists", userController.GetExchangeHistory)
 	}
 
 	linkRouter := r.Group("/links")
 	{
 		linkRouter.GET("/:ngin-link-id", linkController.GetByNginLinkID)
 		//linkRouter.PATCH("", linkController.Update)
-		//linkRouter.POST("/exchange-ngin-link/:ngin-link-id", linkController.ExchangeHistoryCreate)
+		//linkRouter.POST("/exchange-ngin-links/:ngin-link-id", linkController.ExchangeHistoryCreate)
 	}
 
 	return r

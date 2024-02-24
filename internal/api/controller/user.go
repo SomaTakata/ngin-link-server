@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/usecase"
+	"github.com/SomaTakata/ngin-link-server/internal/api/util/clerkutil"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/httperror"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/modelconverter"
 	"github.com/clerkinc/clerk-sdk-go/clerk"
@@ -26,13 +27,13 @@ type userController struct {
 }
 
 func (c userController) Get(ctx *gin.Context) {
-	//clerkID, err := clerkutil.GetClerkID(ctx, c.client)
-	//if err != nil {
-	//	httperror.Handle(ctx, err, http.StatusUnauthorized)
-	//	return
-	//}
+	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusUnauthorized)
+		return
+	}
 
-	user, err := c.userUsecase.Get("clerkID")
+	user, err := c.userUsecase.Get(clerkID)
 	if err != nil && err.Error() == "record not found" {
 		httperror.Handle(ctx, err, http.StatusNotFound)
 		return
@@ -54,13 +55,13 @@ func (c userController) Create(ctx *gin.Context) {
 
 	user := modelconverter.UserFromCreateUserReqModel(&createUser)
 
-	//clerkID, err := clerkutil.GetClerkID(ctx, c.client)
-	//if err != nil {
-	//	httperror.Handle(ctx, err, http.StatusUnauthorized)
-	//	return
-	//}
+	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusUnauthorized)
+		return
+	}
 
-	user.ClerkID = "clerkID"
+	user.ClerkID = clerkID
 
 	newUser, err := c.userUsecase.Create(user)
 	if err != nil {
