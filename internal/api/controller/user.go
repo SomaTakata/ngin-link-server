@@ -44,7 +44,7 @@ func (c userController) Get(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, modelconverter.UserToResModel(user))
 }
 
 func (c userController) Exists(ctx *gin.Context) {
@@ -60,7 +60,7 @@ func (c userController) Exists(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, exists)
+	ctx.JSON(http.StatusOK, gin.H{"exists": exists})
 }
 
 func (c userController) Create(ctx *gin.Context) {
@@ -86,7 +86,7 @@ func (c userController) Create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, newUser)
+	ctx.JSON(http.StatusCreated, modelconverter.UserToResModel(newUser))
 }
 
 func (c userController) Update(ctx *gin.Context) {

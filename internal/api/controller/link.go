@@ -41,7 +41,7 @@ func (c linkController) GetByNginLinkID(ctx *gin.Context) {
 		return
 	}
 
-	nginLinkInfo := resmodel.NginLinkInfo{
+	nginLinkInfo := &resmodel.NginLinkInfo{
 		NginLink: &resmodel.NginLink{
 			NginLinkID:  user.NginLink.NginLinkID,
 			SocialLinks: modelconverter.SocialLinksToResModels(user.NginLink.SocialLinks),
@@ -93,7 +93,7 @@ func (c linkController) GetExchangeHistory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, nginLinkExchangeHistory)
+	ctx.JSON(http.StatusOK, modelconverter.NginLinkExchangeHistoryToResModel(nginLinkExchangeHistory))
 }
 
 func (c linkController) CreateExchangeHistory(ctx *gin.Context) {
@@ -110,5 +110,5 @@ func (c linkController) CreateExchangeHistory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, nginLinkExchangeHistory)
+	ctx.JSON(http.StatusCreated, modelconverter.NginLinkExchangeHistoryToResModel(nginLinkExchangeHistory))
 }

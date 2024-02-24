@@ -4,6 +4,7 @@ import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
 	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
+	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 )
 
 func UserFromDBModels(
@@ -81,4 +82,19 @@ func UserSocialLinksToDBModels(socialLinks []*model.SocialLink) []*dbmodel.UserS
 		}
 	}
 	return userSocialLinks
+}
+
+func UserToResModel(user *model.User) *resmodel.User {
+	return &resmodel.User{
+		ClerkID: user.ClerkID,
+		NginLink: &resmodel.NginLink{
+			NginLinkID:  user.NginLink.NginLinkID,
+			SocialLinks: SocialLinksToResModels(user.NginLink.SocialLinks),
+		},
+		Username:             user.Username,
+		ProfileImageURL:      user.ProfileImageURL,
+		Description:          user.Description,
+		ProgrammingLanguages: user.ProgrammingLanguages,
+		JobRole:              user.JobRole,
+	}
 }

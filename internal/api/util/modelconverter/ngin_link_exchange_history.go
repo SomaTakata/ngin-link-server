@@ -3,6 +3,7 @@ package modelconverter
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
+	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 )
 
 func NginLinkExchangeHistoryFromDBModels(
@@ -23,4 +24,13 @@ func ExchangedNginLinkIDsFromDBModels(
 		exchangedNginLinkIDs[i] = userNginLinkCollection.CollectedNginLinkID
 	}
 	return exchangedNginLinkIDs
+}
+
+func NginLinkExchangeHistoryToResModel(
+	nginLinkExchangeHistory *model.NginLinkExchangeHistory,
+) *resmodel.NginLinkExchangeHistory {
+	return &resmodel.NginLinkExchangeHistory{
+		ClerkID:              nginLinkExchangeHistory.ClerkID,
+		ExchangedNginLinkIDs: nginLinkExchangeHistory.ExchangedNginLinkIDs,
+	}
 }
