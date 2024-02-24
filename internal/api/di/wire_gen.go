@@ -24,7 +24,8 @@ func Wire() *gin.Engine {
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	client := clerkutil.NewClerkClient()
 	userController := controller.NewUserController(userUsecase, client)
-	linkUsecase := usecase.NewLinkUsecase(userRepository)
+	linkRepository := repository.NewLinkRepository(gormDB)
+	linkUsecase := usecase.NewLinkUsecase(linkRepository, userRepository)
 	linkController := controller.NewLinkController(linkUsecase, client)
 	engine := router.NewRouter(userController, linkController)
 	return engine

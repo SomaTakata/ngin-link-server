@@ -2,7 +2,7 @@ package dbmodel
 
 import "gorm.io/gorm"
 
-type UserLinkTreeCollection struct {
+type UserNginLinkCollection struct {
 	gorm.Model
 	UserID              uint   `gorm:"not null"`
 	CollectedNginLinkID string `gorm:"not null"` //FIXME: NginLinkIDに対する外部キーにする

@@ -1,7 +1,6 @@
 package clerkutil
 
 import (
-	"fmt"
 	"github.com/clerkinc/clerk-sdk-go/clerk"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -25,12 +24,10 @@ func GetClerkID(ctx *gin.Context, client clerk.Client) (string, error) {
 	}
 
 	// get the user, and say welcome!
-	user, err := client.Users().Read(sessClaims.Claims.Subject)
+	_, err = client.Users().Read(sessClaims.Claims.Subject)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("%+v\n", user)
-	fmt.Printf("%+v\n", sessClaims.Claims)
 	return sessClaims.Claims.Subject, nil
 }

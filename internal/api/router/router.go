@@ -19,16 +19,17 @@ func NewRouter(userController controller.UserController, linkController controll
 	userRouter := r.Group("/users")
 	{
 		userRouter.GET("", userController.Get)
+		//userRouter.GET("/exists", userController.Exists)
 		userRouter.POST("", userController.Create)
 		//userRouter.PATCH("", userController.Update)
-		//userRouter.GET("/exists", userController.GetExchangeHistory)
 	}
 
 	linkRouter := r.Group("/links")
 	{
 		linkRouter.GET("/:ngin-link-id", linkController.GetByNginLinkID)
 		//linkRouter.PATCH("", linkController.Update)
-		//linkRouter.POST("/exchange-ngin-links/:ngin-link-id", linkController.ExchangeHistoryCreate)
+		linkRouter.GET("/exchanged-ngin-links", linkController.GetExchangeHistory)
+		linkRouter.POST("/exchanged-ngin-links/:ngin-link-id", linkController.CreateExchangeHistory)
 	}
 
 	return r

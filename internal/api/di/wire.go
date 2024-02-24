@@ -22,6 +22,7 @@ func Wire() *gin.Engine {
 		repository.NewUserRepository,
 		usecase.NewUserUsecase,
 		controller.NewUserController,
+		repository.NewLinkRepository,
 		usecase.NewLinkUsecase,
 		controller.NewLinkController,
 	)

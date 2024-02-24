@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/usecase"
+	"github.com/SomaTakata/ngin-link-server/internal/api/util/clerkutil"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/httperror"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/modelconverter"
 	"github.com/clerkinc/clerk-sdk-go/clerk"
@@ -13,6 +14,7 @@ import (
 type LinkController interface {
 	GetByNginLinkID(ctx *gin.Context)
 	Update(ctx *gin.Context)
+	GetExchangeHistory(ctx *gin.Context)
 	CreateExchangeHistory(ctx *gin.Context)
 }
 
@@ -57,6 +59,35 @@ func (c linkController) Update(ctx *gin.Context) {
 
 }
 
-func (c linkController) CreateExchangeHistory(ctx *gin.Context) {
+func (c linkController) GetExchangeHistory(ctx *gin.Context) {
+	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusUnauthorized)
+		return
+	}
 
+	nginLinkExchangeHistory, err := c.linkUsecase.GetExchangeHistory(clerkID)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, nginLinkExchangeHistory)
+}
+
+func (c linkController) CreateExchangeHistory(ctx *gin.Context) {
+	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusUnauthorized)
+		return
+	}
+
+	nginLinkID := ctx.Param("ngin-link-id")
+	nginLinkExchangeHistory, err := c.linkUsecase.CreateExchangeHistory(clerkID, nginLinkID)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, nginLinkExchangeHistory)
 }

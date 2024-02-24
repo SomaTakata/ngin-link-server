@@ -17,7 +17,7 @@ func NewDB() *gorm.DB {
 	db.AutoMigrate(&dbmodel.User{})
 	db.AutoMigrate(&dbmodel.UserProgrammingLanguage{})
 	db.AutoMigrate(&dbmodel.UserSocialLink{})
-	db.AutoMigrate(&dbmodel.UserLinkTreeCollection{})
+	db.AutoMigrate(&dbmodel.UserNginLinkCollection{})
 
 	return db
 }

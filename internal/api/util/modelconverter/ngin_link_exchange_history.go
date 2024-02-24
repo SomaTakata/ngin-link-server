@@ -7,20 +7,20 @@ import (
 
 func NginLinkExchangeHistoryFromDBModels(
 	user *dbmodel.User,
-	userLinkTreeCollection []*dbmodel.UserLinkTreeCollection,
+	userNginLinkCollection []*dbmodel.UserNginLinkCollection,
 ) *model.NginLinkExchangeHistory {
 	return &model.NginLinkExchangeHistory{
 		ClerkID:              user.ClerkID,
-		ExchangedNginLinkIDs: ExchangedNginLinkIDsFromDBModels(userLinkTreeCollection),
+		ExchangedNginLinkIDs: ExchangedNginLinkIDsFromDBModels(userNginLinkCollection),
 	}
 }
 
 func ExchangedNginLinkIDsFromDBModels(
-	userLinkTreeCollections []*dbmodel.UserLinkTreeCollection,
+	userNginLinkCollections []*dbmodel.UserNginLinkCollection,
 ) []string {
-	exchangedNginLinkIDs := make([]string, len(userLinkTreeCollections))
-	for i, userLinkTreeCollection := range userLinkTreeCollections {
-		exchangedNginLinkIDs[i] = userLinkTreeCollection.CollectedNginLinkID
+	exchangedNginLinkIDs := make([]string, len(userNginLinkCollections))
+	for i, userNginLinkCollection := range userNginLinkCollections {
+		exchangedNginLinkIDs[i] = userNginLinkCollection.CollectedNginLinkID
 	}
 	return exchangedNginLinkIDs
 }
