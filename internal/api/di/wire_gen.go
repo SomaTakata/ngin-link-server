@@ -24,6 +24,8 @@ func Wire() *gin.Engine {
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	client := clerkutil.NewClerkClient()
 	userController := controller.NewUserController(userUsecase, client)
-	engine := router.NewRouter(userController)
+	linkUsecase := usecase.NewLinkUsecase(userRepository)
+	linkController := controller.NewLinkController(linkUsecase, client)
+	engine := router.NewRouter(userController, linkController)
 	return engine
 }

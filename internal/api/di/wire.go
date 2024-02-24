@@ -18,10 +18,12 @@ func Wire() *gin.Engine {
 	wire.Build(
 		db.NewDB,
 		clerkutil.NewClerkClient,
+		router.NewRouter,
 		repository.NewUserRepository,
 		usecase.NewUserUsecase,
 		controller.NewUserController,
-		router.NewRouter,
+		usecase.NewLinkUsecase,
+		controller.NewLinkController,
 	)
 	return &gin.Engine{}
 }

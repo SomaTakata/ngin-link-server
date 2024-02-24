@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func NewRouter(userController controller.UserController) *gin.Engine {
+func NewRouter(userController controller.UserController, linkController controller.LinkController) *gin.Engine {
 	r := setupRouter()
 
 	//health check
@@ -23,9 +23,9 @@ func NewRouter(userController controller.UserController) *gin.Engine {
 		//userRouter.PATCH("", userController.Update)
 	}
 
-	//linkRouter := r.Group("/links")
+	linkRouter := r.Group("/links")
 	{
-		//linkRouter.GET("/:ngin-link-id", linkController.Get)
+		linkRouter.GET("/:ngin-link-id", linkController.GetByNginLinkID)
 		//linkRouter.PATCH("", linkController.Update)
 		//linkRouter.POST("/exchange-ngin-link/:ngin-link-id", linkController.ExchangeHistoryCreate)
 	}

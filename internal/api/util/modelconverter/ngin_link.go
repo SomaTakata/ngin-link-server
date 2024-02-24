@@ -4,6 +4,7 @@ import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
 	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
+	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 )
 
 func NginLinkFromDBModels(
@@ -46,4 +47,17 @@ func SocialLinksFromUserReqModel(
 		}
 	}
 	return socialLinks
+}
+
+func SocialLinksToResModel(
+	socialLinks []*model.SocialLink,
+) []*resmodel.SocialLink {
+	resSocialLinks := make([]*resmodel.SocialLink, len(socialLinks))
+	for i, socialLink := range socialLinks {
+		resSocialLinks[i] = &resmodel.SocialLink{
+			PlatformName: socialLink.PlatformName,
+			URL:          socialLink.URL,
+		}
+	}
+	return resSocialLinks
 }

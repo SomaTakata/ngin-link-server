@@ -11,6 +11,7 @@ type UserRepository interface {
 	Get(clerkID string) (*model.User, error)
 	Create(user *model.User) (*model.User, error)
 	Update(user *model.User) (*model.User, error)
+	GetByNginLinkID(nginLinkID string) (*model.User, error)
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {
@@ -86,4 +87,32 @@ func (r userRepository) Create(user *model.User) (*model.User, error) {
 func (r userRepository) Update(user *model.User) (*model.User, error) {
 	//TODO
 	return &model.User{}, nil
+}
+
+func (r userRepository) GetByNginLinkID(nginLinkID string) (*model.User, error) {
+	var dbUser *dbmodel.User
+	var dbUserProgrammingLanguages []*dbmodel.UserProgrammingLanguage
+	var dbUserSocialLinks []*dbmodel.UserSocialLink
+
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.First(&dbUser, "ngin_link_id = ?", nginLinkID).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Find(&dbUserProgrammingLanguages, "user_id = ?", dbUser.ID).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Find(&dbUserSocialLinks, "user_id = ?", dbUser.ID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	user := modelconverter.UserFromDBModels(dbUser, dbUserProgrammingLanguages, dbUserSocialLinks)
+	return user, nil
 }
