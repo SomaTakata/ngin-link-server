@@ -20,21 +20,11 @@ type userUsecase struct {
 }
 
 func (u userUsecase) Get(clerkID string) (*model.User, error) {
-	user, err := u.userRepository.Get(clerkID)
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
+	return u.userRepository.Get(clerkID)
 }
 
 func (u userUsecase) Create(user *model.User) (*model.User, error) {
-	newUser, err := u.userRepository.Create(user)
-	if err != nil {
-		return nil, err
-	}
-
-	return newUser, nil
+	return u.userRepository.Create(user)
 }
 
 func (u userUsecase) Update(user *model.User) (*model.User, error) {
