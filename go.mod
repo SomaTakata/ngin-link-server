@@ -1,6 +1,6 @@
 module github.com/SomaTakata/ngin-link-server
 
-go 1.21
+go 1.22
 
 require (
 	github.com/clerkinc/clerk-sdk-go v1.49.0
