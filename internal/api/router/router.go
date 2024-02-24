@@ -37,7 +37,12 @@ func NewRouter(userController controller.UserController, linkController controll
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{os.Getenv("ALLOW_ORIGIN")},
+		AllowOrigins: []string{os.Getenv("ALLOW_ORIGIN")},
+		AllowHeaders: []string{
+			"Origin",
+			"Content-Type",
+			"Authorization",
+		},
 		AllowCredentials: true,
 	}))
 
