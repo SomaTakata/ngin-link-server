@@ -26,7 +26,19 @@ type userController struct {
 }
 
 func (c userController) Get(ctx *gin.Context) {
+	//clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	//if err != nil {
+	//	httperror.Handle(ctx, err, http.StatusUnauthorized)
+	//	return
+	//}
 
+	user, err := c.userUsecase.Get("clerkID")
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
 }
 
 func (c userController) Create(ctx *gin.Context) {

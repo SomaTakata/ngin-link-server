@@ -20,8 +20,12 @@ type userUsecase struct {
 }
 
 func (u userUsecase) Get(clerkID string) (*model.User, error) {
-	//TODO
-	return &model.User{}, nil
+	user, err := u.userRepository.Get(clerkID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (u userUsecase) Create(user *model.User) (*model.User, error) {
