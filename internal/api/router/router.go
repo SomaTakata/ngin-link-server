@@ -19,7 +19,7 @@ func NewRouter(userController controller.UserController, linkController controll
 	userRouter := r.Group("/users")
 	{
 		userRouter.GET("", userController.Get)
-		//userRouter.GET("/exists", userController.Exists)
+		userRouter.GET("/exists", userController.Exists)
 		userRouter.POST("", userController.Create)
 		//userRouter.PATCH("", userController.Update)
 	}

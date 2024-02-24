@@ -13,6 +13,7 @@ import (
 
 type UserController interface {
 	Get(ctx *gin.Context)
+	Exists(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	Update(ctx *gin.Context)
 }
@@ -44,6 +45,22 @@ func (c userController) Get(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, user)
+}
+
+func (c userController) Exists(ctx *gin.Context) {
+	clerkID, err := clerkutil.GetClerkID(ctx, c.client)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusUnauthorized)
+		return
+	}
+
+	exists, err := c.userUsecase.Exists(clerkID)
+	if err != nil {
+		httperror.Handle(ctx, err, http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, exists)
 }
 
 func (c userController) Create(ctx *gin.Context) {

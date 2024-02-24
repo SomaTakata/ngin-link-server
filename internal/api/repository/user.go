@@ -9,6 +9,7 @@ import (
 
 type UserRepository interface {
 	Get(clerkID string) (*model.User, error)
+	Exists(clerkID string) (bool, error)
 	Create(user *model.User) (*model.User, error)
 	Update(user *model.User) (*model.User, error)
 	GetByNginLinkID(nginLinkID string) (*model.User, error)
@@ -48,6 +49,16 @@ func (r userRepository) Get(clerkID string) (*model.User, error) {
 
 	user := modelconverter.UserFromDBModels(dbUser, dbUserProgrammingLanguages, dbUserSocialLinks)
 	return user, nil
+}
+
+func (r userRepository) Exists(clerkID string) (bool, error) {
+	var count int64
+
+	if err := r.db.Model(&dbmodel.User{}).Where("clerk_id = ?", clerkID).Count(&count).Error; err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
 }
 
 func (r userRepository) Create(user *model.User) (*model.User, error) {

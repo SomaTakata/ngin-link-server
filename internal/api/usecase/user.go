@@ -7,6 +7,7 @@ import (
 
 type UserUsecase interface {
 	Get(clerkID string) (*model.User, error)
+	Exists(clerkID string) (bool, error)
 	Create(user *model.User) (*model.User, error)
 	Update(user *model.User) (*model.User, error)
 }
@@ -21,6 +22,10 @@ type userUsecase struct {
 
 func (u userUsecase) Get(clerkID string) (*model.User, error) {
 	return u.userRepository.Get(clerkID)
+}
+
+func (u userUsecase) Exists(clerkID string) (bool, error) {
+	return u.userRepository.Exists(clerkID)
 }
 
 func (u userUsecase) Create(user *model.User) (*model.User, error) {
