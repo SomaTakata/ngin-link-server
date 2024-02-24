@@ -32,7 +32,11 @@ func (c userController) Get(ctx *gin.Context) {
 	//	return
 	//}
 
-	user, err := c.userUsecase.Get("clerkID")
+	user, err := c.userUsecase.Get("aaa")
+	if err.Error() == "record not found" {
+		httperror.Handle(ctx, err, http.StatusNotFound)
+		return
+	}
 	if err != nil {
 		httperror.Handle(ctx, err, http.StatusInternalServerError)
 		return
