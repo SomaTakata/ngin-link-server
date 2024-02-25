@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
+	"github.com/SomaTakata/ngin-link-server/internal/api/httpmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/usecase"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/clerkutil"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/httperror"
@@ -44,7 +44,7 @@ func (c userController) Get(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, modelconverter.UserToResModel(user))
+	ctx.JSON(http.StatusOK, modelconverter.UserToHTTPModel(user))
 }
 
 func (c userController) Exists(ctx *gin.Context) {
@@ -64,7 +64,7 @@ func (c userController) Exists(ctx *gin.Context) {
 }
 
 func (c userController) Create(ctx *gin.Context) {
-	var createUser *reqmodel.CreateUser
+	var createUser *httpmodel.CreateUser
 	if err := ctx.ShouldBindJSON(&createUser); err != nil {
 		httperror.Handle(ctx, err, http.StatusBadRequest)
 		return
@@ -86,7 +86,7 @@ func (c userController) Create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, modelconverter.UserToResModel(newUser))
+	ctx.JSON(http.StatusCreated, modelconverter.UserToHTTPModel(newUser))
 }
 
 func (c userController) Update(ctx *gin.Context) {

@@ -1,4 +1,4 @@
-package resmodel
+package httpmodel
 
 type NginLinkInfo struct {
 	NginLink             *NginLink `json:"ngin_link"`

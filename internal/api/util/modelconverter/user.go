@@ -2,9 +2,8 @@ package modelconverter
 
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
+	"github.com/SomaTakata/ngin-link-server/internal/api/httpmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
-	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
-	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 )
 
 func UserFromDBModels(
@@ -36,11 +35,11 @@ func ProgrammingLanguagesFromDBModels(
 	return programmingLanguages
 }
 
-func UserFromCreateUserReqModel(createUser *reqmodel.CreateUser) *model.User {
+func UserFromCreateUserReqModel(createUser *httpmodel.CreateUser) *model.User {
 	return &model.User{
 		NginLink: &model.NginLink{
 			NginLinkID:  createUser.NginLinkID,
-			SocialLinks: SocialLinksFromReqModels(createUser.SocialLinks),
+			SocialLinks: SocialLinksFromHTTPModels(createUser.SocialLinks),
 		},
 		Username:             createUser.Username,
 		ProfileImageURL:      createUser.ProfileImageURL,
@@ -84,12 +83,12 @@ func UserSocialLinksToDBModels(socialLinks []*model.SocialLink) []*dbmodel.UserS
 	return userSocialLinks
 }
 
-func UserToResModel(user *model.User) *resmodel.User {
-	return &resmodel.User{
+func UserToHTTPModel(user *model.User) *httpmodel.User {
+	return &httpmodel.User{
 		ClerkID: user.ClerkID,
-		NginLink: &resmodel.NginLink{
+		NginLink: &httpmodel.NginLink{
 			NginLinkID:  user.NginLink.NginLinkID,
-			SocialLinks: SocialLinksToResModels(user.NginLink.SocialLinks),
+			SocialLinks: SocialLinksToHTTPModels(user.NginLink.SocialLinks),
 		},
 		Username:             user.Username,
 		ProfileImageURL:      user.ProfileImageURL,

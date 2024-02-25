@@ -1,8 +1,7 @@
 package controller
 
 import (
-	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
-	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
+	"github.com/SomaTakata/ngin-link-server/internal/api/httpmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/usecase"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/clerkutil"
 	"github.com/SomaTakata/ngin-link-server/internal/api/util/httperror"
@@ -41,10 +40,10 @@ func (c linkController) GetByNginLinkID(ctx *gin.Context) {
 		return
 	}
 
-	nginLinkInfo := &resmodel.NginLinkInfo{
-		NginLink: &resmodel.NginLink{
+	nginLinkInfo := &httpmodel.NginLinkInfo{
+		NginLink: &httpmodel.NginLink{
 			NginLinkID:  user.NginLink.NginLinkID,
-			SocialLinks: modelconverter.SocialLinksToResModels(user.NginLink.SocialLinks),
+			SocialLinks: modelconverter.SocialLinksToHTTPModels(user.NginLink.SocialLinks),
 		},
 		Username:             user.Username,
 		ProfileImageURL:      user.ProfileImageURL,
@@ -63,21 +62,21 @@ func (c linkController) Update(ctx *gin.Context) {
 		return
 	}
 
-	var socialLinksStruct reqmodel.SocialLinksStruct
+	var socialLinksStruct httpmodel.SocialLinksStruct
 	if err := ctx.BindJSON(&socialLinksStruct); err != nil {
 		httperror.Handle(ctx, err, http.StatusBadRequest)
 		return
 	}
 	reqSocialLinks := socialLinksStruct.SocialLinks
 
-	socialLinks := modelconverter.SocialLinksFromReqModels(reqSocialLinks)
+	socialLinks := modelconverter.SocialLinksFromHTTPModels(reqSocialLinks)
 	newSocialLinks, err := c.linkUsecase.Update(clerkID, socialLinks)
 	if err != nil {
 		httperror.Handle(ctx, err, http.StatusInternalServerError)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, modelconverter.SocialLinksToStructResModel(newSocialLinks))
+	ctx.JSON(http.StatusOK, modelconverter.SocialLinksToStructHTTPModel(newSocialLinks))
 }
 
 func (c linkController) GetExchangeHistory(ctx *gin.Context) {
@@ -93,7 +92,7 @@ func (c linkController) GetExchangeHistory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, modelconverter.NginLinkExchangeHistoryToResModel(nginLinkExchangeHistory))
+	ctx.JSON(http.StatusOK, modelconverter.NginLinkExchangeHistoryToHTTPModel(nginLinkExchangeHistory))
 }
 
 func (c linkController) CreateExchangeHistory(ctx *gin.Context) {
@@ -110,5 +109,5 @@ func (c linkController) CreateExchangeHistory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, modelconverter.NginLinkExchangeHistoryToResModel(nginLinkExchangeHistory))
+	ctx.JSON(http.StatusCreated, modelconverter.NginLinkExchangeHistoryToHTTPModel(nginLinkExchangeHistory))
 }

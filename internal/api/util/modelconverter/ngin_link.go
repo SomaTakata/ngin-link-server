@@ -2,9 +2,8 @@ package modelconverter
 
 import (
 	"github.com/SomaTakata/ngin-link-server/internal/api/dbmodel"
+	"github.com/SomaTakata/ngin-link-server/internal/api/httpmodel"
 	"github.com/SomaTakata/ngin-link-server/internal/api/model"
-	"github.com/SomaTakata/ngin-link-server/internal/api/reqmodel"
-	"github.com/SomaTakata/ngin-link-server/internal/api/resmodel"
 )
 
 func NginLinkFromDBModels(
@@ -36,18 +35,18 @@ func SocialLinkFromDBModel(
 	}
 }
 
-func SocialLinksFromReqModels(
-	reqSocialLinks []*reqmodel.SocialLink,
+func SocialLinksFromHTTPModels(
+	reqSocialLinks []*httpmodel.SocialLink,
 ) []*model.SocialLink {
 	socialLinks := make([]*model.SocialLink, len(reqSocialLinks))
 	for i, reqSocialLink := range reqSocialLinks {
-		socialLinks[i] = SocialLinkFromReqModel(reqSocialLink)
+		socialLinks[i] = SocialLinkFromHTTPModel(reqSocialLink)
 	}
 	return socialLinks
 }
 
-func SocialLinkFromReqModel(
-	reqSocialLink *reqmodel.SocialLink,
+func SocialLinkFromHTTPModel(
+	reqSocialLink *httpmodel.SocialLink,
 ) *model.SocialLink {
 	return &model.SocialLink{
 		PlatformName: reqSocialLink.PlatformName,
@@ -55,33 +54,33 @@ func SocialLinkFromReqModel(
 	}
 }
 
-func SocialLinksToResModels(
+func SocialLinksToHTTPModels(
 	socialLinks []*model.SocialLink,
-) []*resmodel.SocialLink {
-	resSocialLinks := make([]*resmodel.SocialLink, len(socialLinks))
+) []*httpmodel.SocialLink {
+	resSocialLinks := make([]*httpmodel.SocialLink, len(socialLinks))
 	for i, socialLink := range socialLinks {
-		resSocialLinks[i] = SocialLinkToResModel(socialLink)
+		resSocialLinks[i] = SocialLinkToHTTPModel(socialLink)
 	}
 	return resSocialLinks
 }
 
-func SocialLinkToResModel(
+func SocialLinkToHTTPModel(
 	socialLink *model.SocialLink,
-) *resmodel.SocialLink {
-	return &resmodel.SocialLink{
+) *httpmodel.SocialLink {
+	return &httpmodel.SocialLink{
 		PlatformName: socialLink.PlatformName,
 		URL:          socialLink.URL,
 	}
 }
 
-func SocialLinksToStructResModel(
+func SocialLinksToStructHTTPModel(
 	socialLinks []*model.SocialLink,
-) resmodel.SocialLinksStruct {
-	resSocialLinks := make([]*resmodel.SocialLink, len(socialLinks))
+) httpmodel.SocialLinksStruct {
+	resSocialLinks := make([]*httpmodel.SocialLink, len(socialLinks))
 	for i, socialLink := range socialLinks {
-		resSocialLinks[i] = SocialLinkToResModel(socialLink)
+		resSocialLinks[i] = SocialLinkToHTTPModel(socialLink)
 	}
-	return resmodel.SocialLinksStruct{
+	return httpmodel.SocialLinksStruct{
 		SocialLinks: resSocialLinks,
 	}
 }

@@ -1,4 +1,4 @@
-package resmodel
+package httpmodel
 
 type NginLinkExchangeHistory struct {
 	ClerkID              string   `json:"clerk_id"`
